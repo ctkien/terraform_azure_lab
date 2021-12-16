@@ -10,3 +10,11 @@ Terraform init to initialize the workspace.
 ```
 terraform init
 ```
+
+Requirements:
+_Add public ip to the VM
+_Add data disk to the VM
+
+Reference 
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/public_ip
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_machine_data_disk_attachment
