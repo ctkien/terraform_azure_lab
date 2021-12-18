@@ -6,6 +6,12 @@ terraform {
       source  = "hashicorp/azurerm"
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "remotestate"
+    storage_account_name = "itforvnremotestate"
+    container_name       = "statefiles"
+    key                  = "terraform.state"
+  }
 }
 provider "azurerm" {
   features {}
@@ -29,6 +35,7 @@ resource "azurerm_subnet" "example" {
   virtual_network_name = azurerm_virtual_network.example.name
   address_prefixes     = ["10.0.2.0/24"]
 }
+
 
 
 resource "azurerm_network_interface" "example" {
@@ -68,23 +75,8 @@ resource "azurerm_linux_virtual_machine" "example" {
   }
 }
 
-resource "azurerm_managed_disk" "example" {
-  name                 = "${var.prefix}-disk1"
-  location             = azurerm_resource_group.example.location
-  resource_group_name  = azurerm_resource_group.example.name
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = 30
-}
-
-resource "azurerm_virtual_machine_data_disk_attachment" "example" {
-  managed_disk_id    = azurerm_managed_disk.example.id
-  virtual_machine_id = azurerm_linux_virtual_machine.example.id
-  lun                = "0"
-  caching            = "ReadWrite"
-}
-
 variable "prefix" {
   description = "resource prefix"
-  default     = "ifrovn"
+  default     = "terraform"
 }
+
